@@ -1,0 +1,61 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+
+<div id="map">
+</div>
+
+<script>
+var map = L.map('map').setView([49.2792, -122.817], 9);
+
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+    maxZoom: 18
+}).addTo(map);
+
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.VictimName) {
+        layer.bindPopup(feature.properties.VictimName);
+    }
+}
+
+var murders = [{ "type": "Feature", "properties": { "Date": "2010-05-22", "TIME OF DAY (0600-1200, 1200-1800, 1800 - 2400, 2400-0600)": "0000-0600", "LOCATION FOUND: public place, private place": "Public, outside private home", "MUNICIPALITY": "Surrey", "INVESTIGATING AGENCY (VPD, IHIT, West Vancouver, Delta)": "IHIT", "VictimName": "Donald Robert Reid", "AGE": "51", "GENDER (M\/F)": "Male", "COD (SHOOTING, STABBING ETC)": "Shooting", "GANG-RELATED (Y\/N)?": "Undisclosed", "MOTIVE (racial\/drugs\/other\/unknown)": "Undisclosed, possibly drug-related", "SHORT SUMMARY OF CASE": "The 51-year-old man, who was known to police, was found outside his south Surrey home at 311 172nd St. about 2 a.m. He had been shot several times There was a grow-op on the property.", "Address": "300 172 St.", "AddressForGeocoding": "300 172 St., Surrey, BC", "Lat": 49.0072562, "Lon": -122.7463099, "SUSPECTS?": "Undisclosed", "CHARGES DROPPED?": "No", "LINKS (TO SUN ARTICLE OR OTHER SITES)": null, "PHOTOS?": null, "AUDIO?": null, "VIDEO?": null, "CONTACTS (FAMILY OR POLICE)": null }, "geometry": { "type": "Point", "coordinates": [ -122.7463099, 49.0072562 ] } },
+{ "type": "Feature", "properties": { "Date": "2009-08-27", "TIME OF DAY (0600-1200, 1200-1800, 1800 - 2400, 2400-0600)": "1200-1800", "LOCATION FOUND: public place, private place": "Public, inside car", "MUNICIPALITY": "Abbotsford", "INVESTIGATING AGENCY (VPD, IHIT, West Vancouver, Delta)": "IHIT", "VictimName": "Bobby Leroy Digeorgio", "AGE": "24", "GENDER (M\/F)": "Male", "COD (SHOOTING, STABBING ETC)": "Undisclosed", "GANG-RELATED (Y\/N)?": "Undisclosed", "MOTIVE (racial\/drugs\/other\/unknown)": "Undisclosed", "SHORT SUMMARY OF CASE": "The body of the 24-year-old man was found in a burned out car near the border about 4 p.m.. He was identified through his dental records. He had a criminal record, struggled with addiction and had links to the Red Scorpion gang.", "Address": "400 Gladwin Rd.", "AddressForGeocoding": "400 Gladwin Rd., Abbotsford, BC", "Lat": 49.0094027, "Lon": -122.3156173, "SUSPECTS?": "Undisclosed", "CHARGES DROPPED?": "No", "LINKS (TO SUN ARTICLE OR OTHER SITES)": null, "PHOTOS?": null, "AUDIO?": null, "VIDEO?": null, "CONTACTS (FAMILY OR POLICE)": null }, "geometry": { "type": "Point", "coordinates": [ -122.3156173, 49.0094027 ] } },
+{ "type": "Feature", "properties": { "Date": "2012-02-19", "TIME OF DAY (0600-1200, 1200-1800, 1800 - 2400, 2400-0600)": "0600-1200", "LOCATION FOUND: public place, private place": "Public", "MUNICIPALITY": "Abbotsford", "INVESTIGATING AGENCY (VPD, IHIT, West Vancouver, Delta)": "IHIT", "VictimName": "Jimmy Chau", "AGE": "31", "GENDER (M\/F)": "Male", "COD (SHOOTING, STABBING ETC)": "Undisclosed", "GANG-RELATED (Y\/N)?": "Yes", "MOTIVE (racial\/drugs\/other\/unknown)": "Gang war", "SHORT SUMMARY OF CASE": "The 31-year-old Edmonton gangster was found dead in a muddy Abbotsford field near the U.S. border about 9:20 am. Police say the murder is likely gang related.", "Address": "Farmer Road and McKenzie Road", "AddressForGeocoding": "Farmer Road and McKenzie Road, Abbotsford, BC", "Lat": 49.0095195, "Lon": -122.2826218, "SUSPECTS?": "Undisclosed", "CHARGES DROPPED?": "No", "LINKS (TO SUN ARTICLE OR OTHER SITES)": null, "PHOTOS?": null, "AUDIO?": null, "VIDEO?": null, "CONTACTS (FAMILY OR POLICE)": null }, "geometry": { "type": "Point", "coordinates": [ -122.2826218, 49.0095195 ] } },
+];
+
+
+var geojsonMarkerOptions = {
+    radius: 10,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+L.geoJson(murders, {
+    onEachFeature: onEachFeature
+}).addTo(map);
+
+/*
+L.geoJson(geojsonFeature, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+}).addTo(map);
+*/
+
+/*
+var myLayer = L.geoJson().addTo(map);
+myLayer.addData(geojsonFeature);
+*/
+
+</script>
