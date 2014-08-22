@@ -22,7 +22,7 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function onEachFeature(feature, layer) {
     // does this feature have a property named popupContent?
     if (feature.properties && feature.properties.VictimName) {
-        layer.bindPopup(feature.properties.VictimName);
+        layer.bindPopup(feature.properties.VictimName + "<br>" + feature.properties.Date);
     }
 }
 
