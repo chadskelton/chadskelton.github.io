@@ -1,0 +1,5 @@
+<iframe src="https://public.tableausoftware.com/views/ChineseImmigrants/Story1?:embed=y&:display_count=no&:showVizHome=no" width="450" height="700" scrolling="no" frameborder="0">
+</iframe>
+<br>
+If you're on a mobile device, please <a href="https://public.tableausoftware.com/views/ChineseImmigrants/Story1?:embed=y&:display_count=no&:showVizHome=no">click here</a> to see the chart.
+<br>
