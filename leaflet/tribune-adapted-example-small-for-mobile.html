@@ -115,6 +115,10 @@
 			info.update(layer.feature.properties);
 		}
 
+		function infoOnly(e) {
+			info.update(layer.feature.properties);
+		}		
+		
 		var geojson;
 
 		function resetHighlight(e) {
@@ -131,7 +135,7 @@
 			layer.on({
 				mouseover: highlightFeature,
 				mouseout: resetHighlight,
-				click: highlightFeature
+				click: infoOnly
 			});
 		}
 
