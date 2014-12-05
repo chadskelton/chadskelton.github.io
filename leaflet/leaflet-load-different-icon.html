@@ -1,0 +1,117 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+<script src="Leaflet.MakiMarkers.js"></script>
+
+<div id="map">
+</div>
+
+<script>
+var map = L.map('map').setView([49.251039, -123.135577], 11);
+
+L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 1,
+	maxZoom: 16
+}).addTo(map);
+
+
+var greenicon = L.MakiMarkers.icon({icon: "hospital", color: "#006400", size: "m"});
+var redicon = L.MakiMarkers.icon({icon: "hospital", color: "#A52A2A", size: "m"});
+var blueicon = L.MakiMarkers.icon({icon: "hospital", color: "#0000FF", size: "m"});
+var greyicon = L.MakiMarkers.icon({icon: "hospital", color: "#A9A9A9", size: "m"});
+
+function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+		
+	if (feature.properties && feature.properties.Name) {
+        layer.bindPopup("<b>Name:</b> " + feature.properties.Name + "<br><b>Address:</b> " + feature.properties.AddressFor);
+	
+	layer.on('mouseover', function (e) {
+                //Popup
+                this.openPopup();
+            });
+
+            layer.on('mouseout', function (e) {
+                //Popup
+                this.closePopup()
+            });	
+
+    }
+};
+
+
+var locations = [{ "type": "Feature", "properties": { "Lat": 49.2443749, "Long": -123.06516190000001, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Karuna Health Foundation", "AddressFor": "4510 Victoria Drive, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "4510 Victoria Drive", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/karuna-medicinals" }, "geometry": { "type": "Point", "coordinates": [ -123.06516190000001, 49.2443749 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2805997, "Long": -123.1005533, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Eden Medicinal Society", "AddressFor": "161 E Pender Street, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "161 E Pender Street", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/eden-medicinal-society" }, "geometry": { "type": "Point", "coordinates": [ -123.1005533, 49.2805997 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2776168, "Long": -123.12488190000001, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Canna Clinic Medicinal Society Granville", "AddressFor": "1132 Granville Street, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "1132 Granville Street", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/canna-clinic-medicinal-societyf612" }, "geometry": { "type": "Point", "coordinates": [ -123.12488190000001, 49.2776168 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.28582, "Long": -123.139866, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Eden Medicinal Society and Vapour Bar", "AddressFor": "1674 Davie St, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "1674 Davie St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/eden-medicinal" }, "geometry": { "type": "Point", "coordinates": [ -123.139866, 49.28582 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2803073, "Long": -123.1014185, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Edens Medical Vapour lounge", "AddressFor": "138 E. Pender St, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "138 E. Pender St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/edens-medical-vapour-lounge" }, "geometry": { "type": "Point", "coordinates": [ -123.1014185, 49.2803073 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2241728, "Long": -123.0907752, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Sea to Sky Alternative Healing Society", "AddressFor": "6636 Fraser Street, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "6636 Fraser Street", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/sea-to-sky-alternative-healing-society" }, "geometry": { "type": "Point", "coordinates": [ -123.0907752, 49.2241728 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2443006, "Long": -123.0629817, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Green Cross Society of BC - Kingsway", "AddressFor": "2127 Kingsway, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "2127 Kingsway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/green-cross-society-of-bc" }, "geometry": { "type": "Point", "coordinates": [ -123.0629817, 49.2443006 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2811947, "Long": -123.0906801, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "East Of Eden", "AddressFor": "637 E Hastings, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "637 E Hastings", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/eden-east" }, "geometry": { "type": "Point", "coordinates": [ -123.0906801, 49.2811947 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2690754, "Long": -123.1031097, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Sea to Sky - Lounge", "AddressFor": "68 E. 2nd Ave. Unit #100 , Vancouver, BC", "Confidence": "ROOFTOP", "Address": "68 E. 2nd Ave. Unit #100 ", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/sea-to-sky---lounge" }, "geometry": { "type": "Point", "coordinates": [ -123.1031097, 49.2690754 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2592315, "Long": -123.1151095, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Westcoast Medicann", "AddressFor": "2931 Cambie St, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "2931 Cambie St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/westcoast-medicann" }, "geometry": { "type": "Point", "coordinates": [ -123.1151095, 49.2592315 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2812318, "Long": -123.0927063, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "The Healing Tree Dispensary", "AddressFor": "529 East Hastings Street, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "529 East Hastings Street", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/the-healing-treed322" }, "geometry": { "type": "Point", "coordinates": [ -123.0927063, 49.2812318 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2646774, "Long": -123.0699261, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Canna Clinic Medicinal Society", "AddressFor": "2223 Commercial Drive, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "2223 Commercial Drive", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/canna-clinic-medicinal-society" }, "geometry": { "type": "Point", "coordinates": [ -123.0699261, 49.2646774 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2751761, "Long": -123.1269445, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Seymour Wellness Society", "AddressFor": "1304 Seymour St, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "1304 Seymour St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/seymour-wellness-society" }, "geometry": { "type": "Point", "coordinates": [ -123.1269445, 49.2751761 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2631549, "Long": -123.1055827, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "The Healing Tree Dispensary & Vapour Lounge", "AddressFor": "21 W Broadway, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "21 W Broadway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/the-healing-tree-vapour" }, "geometry": { "type": "Point", "coordinates": [ -123.1055827, 49.2631549 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2683948, "Long": -123.17051360000001, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "The Buddhas Sister", "AddressFor": "2918 West 4th Ave, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "2918 West 4th Ave", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/the-buddhas-sister" }, "geometry": { "type": "Point", "coordinates": [ -123.17051360000001, 49.2683948 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2466496, "Long": -123.1010098, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Green Cross Society of BC - Main St.", "AddressFor": "4296 Main St., Vancouver, BC", "Confidence": "ROOFTOP", "Address": "4296 Main St.", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/green-cross-society-of-bc-2" }, "geometry": { "type": "Point", "coordinates": [ -123.1010098, 49.2466496 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2516948, "Long": -123.078692, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Pacific CannaMed Kingsway", "AddressFor": "1259 Kingsway, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "1259 Kingsway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/pacific-cannamed" }, "geometry": { "type": "Point", "coordinates": [ -123.078692, 49.2516948 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2596177, "Long": -123.0778163, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Medicinal Express - Clark and 12th", "AddressFor": "1290 East 12th Ave., Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "1290 East 12th Ave.", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/medicinal-express" }, "geometry": { "type": "Point", "coordinates": [ -123.0778163, 49.2596177 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.232087, "Long": -123.028141, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Urban Earth Med", "AddressFor": "3535 Kingsway, Vancouver, BC", "Confidence": null, "Address": "3535 Kingsway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/urban-earth-med" }, "geometry": { "type": "Point", "coordinates": [ -123.028141, 49.232087 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2362491, "Long": -123.0439204, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Cannpassion Medicinal Cannabis Society", "AddressFor": "2943 Kingsway, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "2943 Kingsway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/cannpassion-medicinal-cannabis-society150d" }, "geometry": { "type": "Point", "coordinates": [ -123.0439204, 49.2362491 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2090361, "Long": -123.1403022, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Pacific CannaMed Marpole", "AddressFor": "8546 Granville St., Vancouver, BC", "Confidence": "ROOFTOP", "Address": "8546 Granville St.", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/pacific-canna-med---marpole" }, "geometry": { "type": "Point", "coordinates": [ -123.1403022, 49.2090361 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2479454, "Long": -123.0901262, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Med Pot Now", "AddressFor": "4170 Fraser St, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "4170 Fraser St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/med-pot-now" }, "geometry": { "type": "Point", "coordinates": [ -123.0901262, 49.2479454 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2289679, "Long": -123.0906432, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "iMedikate", "AddressFor": "6128 Fraser St, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "6128 Fraser St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/imedikate" }, "geometry": { "type": "Point", "coordinates": [ -123.0906432, 49.2289679 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2681896, "Long": -123.1545662, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Buddha Barn", "AddressFor": "2179 W 4th Ave, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "2179 W 4th Ave", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/buddha-barn" }, "geometry": { "type": "Point", "coordinates": [ -123.1545662, 49.2681896 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2833055, "Long": -123.10663630000001, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Red Med", "AddressFor": "231 Abbott St, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "231 Abbott St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/red-med" }, "geometry": { "type": "Point", "coordinates": [ -123.10663630000001, 49.2833055 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2690002, "Long": -123.0569435, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Medicinal Express", "AddressFor": "1745 Nanaimo St, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "1745 Nanaimo St", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/medicinal-expressf30d" }, "geometry": { "type": "Point", "coordinates": [ -123.0569435, 49.2690002 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2631287, "Long": -123.1107726, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Sunrise Wellness Foundation", "AddressFor": "258 W Broadway, Vancouver, BC", "Confidence": "RANGE_INTERPOLATED", "Address": "258 W Broadway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/sunrise-wellness-foundation" }, "geometry": { "type": "Point", "coordinates": [ -123.1107726, 49.2631287 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2631624, "Long": -123.1059206, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Lime Life Society", "AddressFor": "45 West Broadway, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "45 West Broadway", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/limelifesocietycom" }, "geometry": { "type": "Point", "coordinates": [ -123.1059206, 49.2631624 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2798354, "Long": -123.1082831, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "Serenity Natural Health Society", "AddressFor": "#206 - 181 Keefer Pl,, Vancouver, BC", "Confidence": "ROOFTOP", "Address": "#206 - 181 Keefer Pl,", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/serenity-natural-health-society" }, "geometry": { "type": "Point", "coordinates": [ -123.1082831, 49.2798354 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.257814, "Long": -123.069887, "ClickHere": "Click for more info", "Source": "Leafly", "Name": "BC Compassion Club Society", "AddressFor": "2995 Commercial Drive, Vancouver, BC", "Confidence": null, "Address": "2995 Commercial Drive", "LeaflyURL": "http:\/\/www.leafly.com\/dispensary-info\/bc-compassion-club-society" }, "geometry": { "type": "Point", "coordinates": [ -123.069887, 49.257814 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.28108, "Long": -123.085281, "ClickHere": "Click for more info", "Source": "Mike", "Name": "The Medicinal Cannabis Dispensary", "AddressFor": "880 East Hastings Street, Vancouver, BC", "Confidence": null, "Address": null, "LeaflyURL": null }, "geometry": { "type": "Point", "coordinates": [ -123.085281, 49.28108 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.280546, "Long": -123.130884, "ClickHere": "Click for more info", "Source": "Mike", "Name": "The Medicinal Cannabis Dispensary", "AddressFor": "1182 Thurlow Street, Vancouver, BC", "Confidence": null, "Address": null, "LeaflyURL": null }, "geometry": { "type": "Point", "coordinates": [ -123.130884, 49.280546 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.2787, "Long": -123.12976, "ClickHere": "Click for more info", "Source": "Mike", "Name": "Weeds Glass & Gifts Ltd.", "AddressFor": "1232 Burrard St., Vancouver, BC", "Confidence": null, "Address": "1232 Burrard St.", "LeaflyURL": null }, "geometry": { "type": "Point", "coordinates": [ -123.12976, 49.2787 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.26979, "Long": -123.145622, "ClickHere": "Click for more info", "Source": "Mike", "Name": "Weeds Glass & Gifts Ltd.", "AddressFor": "104-1807 Burrard St., Vancouver, BC", "Confidence": null, "Address": "104-1807 Burrard St.", "LeaflyURL": "http:\/\/www.weedsglassandgifts.com\/" }, "geometry": { "type": "Point", "coordinates": [ -123.145622, 49.26979 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.232915, "Long": -123.078183, "ClickHere": "Click for more info", "Source": "Chad", "Name": "Weeds Glass & Gifts Ltd.", "AddressFor": "1353 East 41st Ave., Vancouver, BC", "Confidence": null, "Address": "1353 East 41st Ave.", "LeaflyURL": "http:\/\/www.weedsglassandgifts.com\/" }, "geometry": { "type": "Point", "coordinates": [ -123.078183, 49.232915 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.26837, "Long": -123.170483, "ClickHere": "Click for more info", "Source": "Mike", "Name": "Weeds Glass & Gifts Ltd.", "AddressFor": "2916 W. 4th Ave., Vancouver, BC", "Confidence": null, "Address": "2916 W. 4th Ave.", "LeaflyURL": "http:\/\/www.weedsglassandgifts.com\/" }, "geometry": { "type": "Point", "coordinates": [ -123.170483, 49.26837 ] } },
+{ "type": "Feature", "properties": { "Lat": 49.256547, "Long": -123.101342, "ClickHere": "Click for more info", "Source": "Blue", "Name": "Weeds Glass & Gifts Ltd.", "AddressFor": "211 East 16th Ave., Vancouver, BC", "Confidence": null, "Address": "211 East 16th Ave.", "LeaflyURL": "http:\/\/www.weedsglassandgifts.com\/" }, "geometry": { "type": "Point", "coordinates": [ -123.101342, 49.256547 ] } }
+];
+
+L.geoJson(locations, {
+	pointToLayer: function (feature, latlng){
+		if (feature.properties && feature.properties.Source) {
+		switch (feature.properties.Source) {
+			case 'Leafly': return L.marker (latlng, {icon: greenicon});
+			case 'Mike': return L.marker (latlng, {icon: redicon});
+			case 'Blue': return L.marker (latlng, {icon: blueicon});
+			default: return L.marker (latlng, {icon: greyicon});
+	}
+	}},
+    onEachFeature: onEachFeature
+}).addTo(map);
+
+
+/*
+L.geoJson(geojsonFeature, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+}).addTo(map);
+*/
+
+/*
+var myLayer = L.geoJson().addTo(map);
+myLayer.addData(geojsonFeature);
+*/
+
+</script>
