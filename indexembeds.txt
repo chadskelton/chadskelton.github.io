@@ -1,0 +1,8 @@
+IFRAME EMBED CODE FOR THE AFFORDABILITY TRENDS CHART:
+
+<iframe src="https://public.tableau.com/views/UrbanAnalytics-AffordabilityTrends/LineChart?:embed=y&:display_count=yes&:showVizHome=no" width="600" height="675" scrolling="no" frameborder="0"> </iframe>
+
+IFRAME EMBED CODE FOR THE AFFORDABILITY CALCULATOR CHART:
+
+<iframe src="https://public.tableau.com/views/UrbanAnalytics-AffordabilityCalculator/AffordabilityCalculator?:embed=y&:display_count=yes&:showVizHome=no" width="600" height="675" scrolling="no" frameborder="0"> </iframe>
+
