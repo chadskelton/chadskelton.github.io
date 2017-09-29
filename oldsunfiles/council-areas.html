@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <style>
+    #map-canvas { width:440px; height:450px; }
+    .layer-wizard-search-label { font-family: sans-serif };
+  </style>
+  <script type="text/javascript"
+    src="https://maps.google.com/maps/api/js?sensor=false">
+  </script>
+  <script type="text/javascript">
+    var map;
+    var layer_0;
+    function initialize() {
+      map = new google.maps.Map(document.getElementById('map-canvas'), {
+        center: new google.maps.LatLng(49.25202930790797, -123.14945788378905),
+        zoom: 11,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      layer_0 = new google.maps.FusionTablesLayer({
+        map: map,
+        styleId: 2,
+        templateId: 2
+      });
+	  changeMap_0();
+    }
+    function changeMap_0() {
+      var whereClause;
+      var searchString = document.getElementById('search-string_0').value.replace(/'/g, "\\'");
+      if (searchString != '--Select--') {
+        whereClause = "'Party' = '" + searchString + "'";
+      }
+      layer_0.setOptions({
+        query: {
+          select: "col3>>1",
+          from: "16lsD90bx385USakcmYPs2NbKzwziPd3MROfXzpbV",
+          where: whereClause
+        }
+      });
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+  </script>
+  </head>
+  <body>
+  
+  <div style="font-family:verdana;font-size:85%;line-height:120%"><table>
+<tr>
+<td width=425>Map shows in which neighbourhoods the Greens got the most votes for council. <b>Click on an area</b> for more details. Select other parties from the dropdown menu.</td>
+</tr>
+</table></div>
+
+<br>
+<div style="font-family:verdana;font-size:80%;line-height:90%"><table>
+<tr>
+<td width=70 height=10 bgcolor=b2182b></td>
+<td width=70 height=10 bgcolor=ef8a62></td>
+<td width=70 height=10 bgcolor=fddbc7></td>
+<td width=70 height=10 bgcolor=d1e5f0></td>
+<td width=70 height=10 bgcolor=67a9cf></td>
+<td width=70 height=10 bgcolor=2166ac></td>
+</tr>
+<tr>
+<td width=70 height=10 bgcolor=><b>Less support</b></td>
+<td width=70 height=10 bgcolor=></td>
+<td width=70 height=10 bgcolor=></td>
+<td width=70 height=10 bgcolor=></td>
+<td width=70 height=10 bgcolor=></td>
+<td width=70 height=10 bgcolor=><b>More support</b></td>
+</tr>
+</table></div>						
+<br>	  
+  
+    <div id="map-canvas"></div>
+    <div style="margin-top: 10px;">
+      <label class="layer-wizard-search-label">
+        Select Party
+        <select id="search-string_0" selected="Green" onchange="changeMap_0(this.value);">
+          <option value="Green">Green</option>
+          <option value="COPE">COPE</option>
+          <option value="NPA">NPA</option>
+          <option value="Vision Vancouver">Vision</option>
+        </select>
+      </label> 
+    </div>
+  </body>
+</html>
