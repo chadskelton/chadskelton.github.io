@@ -24,6 +24,11 @@
             font-size: 1em;
             width: 50%;
         }
+        #message {
+            font-size: 1.5em;
+            color: red;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -32,7 +37,7 @@
     <img id="flag" src="" alt="Country Flag">
     <h2>What is the capital of this country?</h2>
     <div id="options"></div>
-    <button onclick="generateQuestion()">Next</button>
+    <p id="message"></p>
     <script>
         let data = [];
         let correctAnswer = '';
@@ -74,19 +79,22 @@
                 button.onclick = () => checkAnswer(option);
                 optionsDiv.appendChild(button);
             });
+
+            // Clear the message
+            document.getElementById('message').textContent = '';
         }
 
         function checkAnswer(answer) {
             let chosenCountry = data.find(country => country.capital === answer).country;
             if (answer === correctAnswer) {
-                alert('Correct, ' + correctAnswer + ' is the capital of ' + correctCountry);
+                document.getElementById('message').textContent = 'Correct, ' + correctAnswer + ' is the capital of ' + correctCountry;
                 correctCount++;
             } else {
-                alert('Sorry, that\'s wrong, ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctAnswer + ', the capital of ' + correctCountry);
+                document.getElementById('message').textContent = 'Sorry, that\'s wrong, ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctAnswer + ', the capital of ' + correctCountry;
                 incorrectCount++;
             }
             document.getElementById('score').textContent = 'Correct: ' + correctCount + ' Incorrect: ' + incorrectCount;
-            generateQuestion();
+            setTimeout(generateQuestion, 2000); // Wait 2 seconds before generating the next question
         }
     </script>
 </body>
