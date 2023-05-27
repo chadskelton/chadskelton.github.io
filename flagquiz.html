@@ -20,9 +20,12 @@
         }
         button {
             margin: 10px;
-            padding: 15px;
+            padding: 30px; /* Increased padding to make buttons taller */
             font-size: 1em;
             width: 50%;
+        }
+        h1 {
+            font-size: 1em; /* Reduced font size for the title */
         }
         #message {
             font-size: 1.5em;
@@ -38,6 +41,7 @@
     <h2>What is the capital of this country?</h2>
     <div id="options"></div>
     <p id="message"></p>
+    <button id="next" style="display: none;" onclick="generateQuestion()">Next</button>
     <script>
         let data = [];
         let correctAnswer = '';
@@ -80,6 +84,9 @@
                 optionsDiv.appendChild(button);
             });
 
+            // Hide the next button
+            document.getElementById('next').style.display = 'none';
+
             // Clear the message
             document.getElementById('message').textContent = '';
         }
@@ -93,12 +100,8 @@
                 document.getElementById('message').textContent = 'Sorry, that\'s wrong, ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctAnswer + ', the capital of ' + correctCountry;
                 incorrectCount++;
             }
-            document.getElementById('score').textContent = 'Correct: ' + correctCount + ' Incorrect: ' + incorrectCount;
-            setTimeout(generateQuestion, 4000); // Wait 4 seconds before generating the next question
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('score').textContent = 'Correct: ' + correct
+
 
     </script>
 </body>
