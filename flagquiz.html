@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Country Capital Quiz</title>
+    <style>
+        #flag {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Country Capital Quiz</h1>
+    <img id="flag" src="" alt="Country Flag">
+    <h2>What is the capital of this country?</h2>
+    <div id="options"></div>
+    <button onclick="generateQuestion()">Next</button>
+    <script>
+        let data = [];
+        let correctAnswer = '';
+
+        fetch('countries_capitals_flags.json')
+            .then(response => response.json())
+            .then(json => {
+                data = json;
+                generateQuestion();
+            });
+
+        function generateQuestion() {
+            const question = data[Math.floor(Math.random() * data.length)];
+            document.getElementById('flag').src = question.flag_url;
+            correctAnswer = question.capital;
+
+            // Generate options
+            let options = [correctAnswer];
+            while (options.length < 5) {
+                const option = data[Math.floor(Math.random() * data.length)].capital;
+                if (!options.includes(option)) {
+                    options.push(option);
+                }
+            }
+
+            // Shuffle options
+            options.sort(() => Math.random() - 0.5);
+
+            // Display options
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(answer) {
+            if (answer === correctAnswer) {
+                alert('Correct!');
+            } else {
+                alert('Incorrect. The correct answer is ' + correctAnswer);
+            }
+            generateQuestion();
+        }
+    </script>
+</body>
+</html>
