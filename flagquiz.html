@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Toby's Country Capital Quiz by Dad</title>
+    <title>Toby's Flag and Capitals Quiz By Dad</title>
     <style>
         #flag {
             width: 200px;
@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <h1>Country Capital Quiz</h1>
+    <h1>Toby's Flag and Capitals Quiz By Dad</h1>
     <img id="flag" src="" alt="Country Flag">
     <h2>What is the capital of this country?</h2>
     <div id="options"></div>
@@ -61,7 +61,7 @@
             if (answer === correctAnswer) {
                 alert('Correct, ' + correctAnswer + ' is the capital of ' + correctCountry);
             } else {
-                alert('Sorry, that\'s wrong. ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctCountry);
+                alert('Sorry, that\'s wrong, ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctAnswer + ', the capital of ' + correctCountry);
             }
             generateQuestion();
         }
