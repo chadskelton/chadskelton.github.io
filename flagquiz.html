@@ -18,6 +18,7 @@
     <script>
         let data = [];
         let correctAnswer = '';
+        let correctCountry = '';
 
         fetch('countries_capitals_flags.json')
             .then(response => response.json())
@@ -30,13 +31,14 @@
             const question = data[Math.floor(Math.random() * data.length)];
             document.getElementById('flag').src = question.flag_url;
             correctAnswer = question.capital;
+            correctCountry = question.country;
 
             // Generate options
             let options = [correctAnswer];
             while (options.length < 5) {
-                const option = data[Math.floor(Math.random() * data.length)].capital;
-                if (!options.includes(option)) {
-                    options.push(option);
+                const option = data[Math.floor(Math.random() * data.length)];
+                if (!options.includes(option.capital) && option.capital !== null) {
+                    options.push(option.capital);
                 }
             }
 
@@ -55,10 +57,11 @@
         }
 
         function checkAnswer(answer) {
+            let chosenCountry = data.find(country => country.capital === answer).country;
             if (answer === correctAnswer) {
-                alert('Correct!');
+                alert('Correct, ' + correctAnswer + ' is the capital of ' + correctCountry);
             } else {
-                alert('Incorrect. The correct answer is ' + correctAnswer);
+                alert('Sorry, that\'s wrong. ' + answer + ' is the capital of ' + chosenCountry);
             }
             generateQuestion();
         }
