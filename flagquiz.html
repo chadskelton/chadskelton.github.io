@@ -4,7 +4,7 @@
     <title>Toby's Flag and Capitals Quiz By Dad</title>
     <style>
         body {
-            font-size: 1em;
+            font-size: 2em;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -16,36 +16,19 @@
             text-align: center;
         }
         #flag {
-            width: 90%;
-            max-width: 300px;
+            width: 50%;
         }
         button {
             margin: 10px;
             padding: 15px;
             font-size: 1em;
-            width: 90%;
-            max-width: 300px;
-        }
-        h1, h2 {
-            padding: 20px;
-        }
-
-        /* Larger screen adjustments */
-        @media screen and (min-width: 600px) {
-            body {
-                font-size: 2em;
-            }
-            #flag {
-                width: 50%;
-            }
-            button {
-                width: 50%;
-            }
+            width: 50%;
         }
     </style>
 </head>
 <body>
     <h1>Toby's Flag and Capitals Quiz By Dad</h1>
+    <p id="score">Correct: 0 Incorrect: 0</p>
     <img id="flag" src="" alt="Country Flag">
     <h2>What is the capital of this country?</h2>
     <div id="options"></div>
@@ -54,6 +37,8 @@
         let data = [];
         let correctAnswer = '';
         let correctCountry = '';
+        let correctCount = 0;
+        let incorrectCount = 0;
 
         fetch('countries_capitals_flags.json')
             .then(response => response.json())
@@ -95,9 +80,12 @@
             let chosenCountry = data.find(country => country.capital === answer).country;
             if (answer === correctAnswer) {
                 alert('Correct, ' + correctAnswer + ' is the capital of ' + correctCountry);
+                correctCount++;
             } else {
                 alert('Sorry, that\'s wrong, ' + answer + ' is the capital of ' + chosenCountry + '. The correct answer is ' + correctAnswer + ', the capital of ' + correctCountry);
+                incorrectCount++;
             }
+            document.getElementById('score').textContent = 'Correct: ' + correctCount + ' Incorrect: ' + incorrectCount;
             generateQuestion();
         }
     </script>
