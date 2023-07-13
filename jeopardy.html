@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Random Jeopardy Clue</title>
+        <style>
+            #clue {
+                cursor: pointer;
+                color: blue;
+                text-decoration: underline;
+            }
+
+            #category,
+            #value {
+                font-size: smaller;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Random Jeopardy Clue</h1>
+        <p id="category"></p>
+        <p id="value"></p>
+        <p id="clue"></p>
+        <p id="answer" style="display: none;"></p>
+        <button id="next" style="display: none;">Next Question</button>
+
+        <script>
+            function loadClue() {
+                fetch('http://cluebase.lukelav.in/clues/random')
+                    .then(response => response.json())
+                    .then(data => {
+                        const clueData = data.data[0];
+                        document.getElementById('category').innerText = 'Category: ' + clueData.category;
+                        document.getElementById('value').innerText = 'Value: $' + clueData.value;
+                        document.getElementById('clue').innerText = clueData.clue;
+                        document.getElementById('answer').innerText = 'Answer: ' + clueData.response;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('clue').innerText = 'An error occurred while fetching the clue. Please try again.';
+                    });
+            }
+
+            window.onload = function() {
+                loadClue();
+
+                document.getElementById('clue').addEventListener('click', function() {
+                    document.getElementById('answer').style.display = 'block';
+                    document.getElementById('next').style.display = 'inline-block';
+                });
+
+                document.getElementById('next').addEventListener('click', function() {
+                    document.getElementById('answer').style.display = 'none';
+                    document.getElementById('next').style.display = 'none';
+                    loadClue();
+                });
+            };
+        </script>
+    </body>
+</html>
