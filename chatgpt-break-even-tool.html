@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>ChatGPT Learning Break-Even Calculator</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #111827;
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --accent: #60a5fa;
+    --accent2: #34d399;
+    --grid: #1f2937;
+  }
+  html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+  .wrap { max-width: 980px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 1.6rem; margin: 0 0 6px; }
+  p { color: var(--muted); margin-top: 6px; }
+  .card { background: var(--card); border: 1px solid #1f2937; border-radius: 12px; padding: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .controls { display: grid; gap: 12px; }
+  label { display: block; font-weight: 600; margin-bottom: 6px; }
+  input[type="number"], input[type="range"] { width: 100%; }
+  .row { display: grid; grid-template-columns: 180px 1fr 90px; gap: 8px; align-items: center; }
+  .hint { font-size: 0.9rem; color: var(--muted); }
+  .chart-wrap { position: relative; height: 420px; }
+  .legend { display: flex; gap: 16px; font-size: 0.9rem; margin-top: 8px; color: var(--muted); }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .accent { background: var(--accent); }
+  .accent2 { background: var(--accent2); }
+  .keystone { position: absolute; top: 8px; right: 8px; background: rgba(17,24,39,.75); backdrop-filter: blur(4px); border: 1px solid #374151; border-radius: 8px; padding: 8px 10px; font-size: .9rem; }
+  .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; background: #1f2937; margin-left: 6px; border:1px solid #374151; }
+  .note { margin-top: 10px; font-size: 0.92rem; color: var(--muted); }
+  .foot { margin-top: 14px; font-size: 0.85rem; color: var(--muted); }
+  .be-marker { position:absolute; transform: translateX(-50%); top: 24px; color: var(--text); background: rgba(17,24,39,.85); border: 1px solid #374151; border-radius: 6px; padding: 4px 6px; font-size: .85rem; pointer-events: none; }
+  button.reset { background: #1f2937; color: var(--text); border: 1px solid #374151; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+  button.reset:hover { filter: brightness(1.1); }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Will learning how to get ChatGPT to do it pay off?</h1>
+<p>Use this to see when time saved each week outweighs the time you spend learning how to make ChatGPT do a task for you.</p>
+<div class="card grid">
+<div class="controls">
+<div class="row">
+<label for="learnHours">Estimated time for you to learn (hours)</label>
+<input id="learnHours" max="50" min="0" step="1" type="range" value="10"/>
+<input id="learnHoursNum" max="50" min="0" step="1" type="number" value="10"/>
+</div>
+<div class="row">
+<label for="weeklyHours">Time you spend on the task per week (hours)</label>
+<input id="weeklyHours" max="20" min="0" step="0.25" type="range" value="2"/>
+<input id="weeklyHoursNum" max="20" min="0" step="0.25" type="number" value="2"/>
+</div>
+<div>
+<button class="reset" id="resetBtn">Reset</button>
+<span class="hint">Tip: drag the sliders or type exact numbers.</span>
+</div>
+<div class="note">
+<strong>Assumption:</strong> after you learn it, ChatGPT handles <em>this task end-to-end</em>, so you regain those hours each week.
+          If your situation is less than full automation, multiply your weekly hours by your estimated efficiency in your head (e.g., 0.6×).
+        </div>
+</div>
+<div>
+<div class="chart-wrap">
+<svg aria-label="Break-even chart" height="100%" id="chart" preserveaspectratio="none" role="img" viewbox="0 0 900 400" width="100%"></svg>
+<div class="be-marker" id="beLabel" style="display:none; top: 60px; background: rgba(17,24,39,0.9);"></div>
+<div class="keystone">
+            Break-even: <strong id="beText">—</strong>
+<span class="pill" id="roiText">—</span>
+</div>
+</div>
+<div class="legend">
+<div><span class="swatch accent"></span> Cumulative time saved</div>
+<div><span class="swatch accent2"></span> Time invested to learn</div>
+</div>
+<div class="foot">Model: cumulative saved = (weekly hours) × weeks; invested = learning hours (upfront). Break-even occurs when saved ≥ invested.</div>
+</div>
+</div>
+<p style="margin-top:20px; font-size:0.85rem; color:var(--muted);"><a href="https://chadskelton.com" style="color:var(--accent); text-decoration:none;" target="_blank">Made by Chad Skelton with ChatGPT</a></p></div>
+<script>
+(function(){
+  const svg = document.getElementById('chart');
+  const beLabel = document.getElementById('beLabel');
+  const beText = document.getElementById('beText');
+  const roiText = document.getElementById('roiText');
+
+  const learnRange = document.getElementById('learnHours');
+  const learnNum   = document.getElementById('learnHoursNum');
+  const weekRange  = document.getElementById('weeklyHours');
+  const weekNum    = document.getElementById('weeklyHoursNum');
+  const resetBtn   = document.getElementById('resetBtn');
+
+  // sync helpers
+  function link(a, b) {
+    const sync = (src, dest) => () => { dest.value = src.value; render(); };
+    a.addEventListener('input', sync(a, b));
+    b.addEventListener('input', sync(b, a));
+  }
+  link(learnRange, learnNum);
+  link(weekRange, weekNum);
+
+  resetBtn.addEventListener('click', () => {
+    learnRange.value = learnNum.value = 10;
+    weekRange.value = weekNum.value = 2;
+    render();
+  });
+
+  function render() {
+    const learnHrs = Math.max(0, parseFloat(learnNum.value || 0));
+    const weeklyHrs = Math.max(0, parseFloat(weekNum.value || 0));
+
+    // Determine break-even week
+    let beWeek = null;
+    if (weeklyHrs > 0) {
+      beWeek = Math.ceil(learnHrs / weeklyHrs);
+    }
+
+    // Set chart length: break-even + 10 weeks, or 52 weeks if break-even is earlier
+    let weeks = 52;
+    if (beWeek !== null) {
+      weeks = Math.max(beWeek + 10, 52);
+    }
+
+    // Build data
+    const xs = [...Array(weeks + 1)].map((_, i) => i); // 0..weeks
+    const saved = xs.map(w => weeklyHrs * w);
+    const invested = xs.map(() => learnHrs);
+
+    // Y max with padding
+    let yMax = Math.max(learnHrs, ...saved);
+    if (yMax <= 0) yMax = 10;
+    const yPad = yMax * 0.15;
+    yMax = yMax + yPad;
+
+    // Clear svg
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    const W = 900, H = 400;
+    const m = {l: 55, r: 20, t: 10, b: 40};
+    const iw = W - m.l - m.r;
+    const ih = H - m.t - m.b;
+
+    const xScale = w => m.l + (iw * w / weeks);
+    const yScale = y => m.t + ih - (ih * y / yMax);
+
+    // grid and axes
+    grid();
+
+    // saved line
+    const savedPath = linePath(xs.map((w,i) => [xScale(w), yScale(saved[i])]));
+    savedPath.setAttribute('fill','none');
+    savedPath.setAttribute('stroke','var(--accent)');
+    savedPath.setAttribute('stroke-width','3');
+    svg.appendChild(savedPath);
+
+    // invested line
+    const investPath = linePath([[xScale(0), yScale(learnHrs)], [xScale(weeks), yScale(learnHrs)]]);
+    investPath.setAttribute('fill','none');
+    investPath.setAttribute('stroke','var(--accent2)');
+    investPath.setAttribute('stroke-width','3');
+    svg.appendChild(investPath);
+
+    // break-even marker
+    if (beWeek !== null) {
+      const x = xScale(beWeek);
+      const y = yScale(learnHrs);
+      const vline = line(x, yScale(0), x, y);
+      vline.setAttribute('stroke', 'rgba(96,165,250,.7)');
+      vline.setAttribute('stroke-dasharray', '4 6');
+      vline.setAttribute('stroke-width', '2');
+      svg.appendChild(vline);
+
+      beLabel.style.display = 'block';
+      beLabel.style.left = (x / W * 100) + '%';
+      beLabel.textContent = `Week ${beWeek}`;
+      beText.textContent = `week ${beWeek}`;
+
+      const totalSaved = weeklyHrs * weeks;
+      const roi = learnHrs > 0 ? ((totalSaved - learnHrs) / learnHrs) : (totalSaved > 0 ? Infinity : 0);
+      roiText.textContent = isFinite(roi) ? `ROI at week ${weeks}: ${(roi*100).toFixed(0)}%` : `ROI at week ${weeks}: —`;
+    } else {
+      beLabel.style.display = 'none';
+      beText.textContent = '—';
+      roiText.textContent = '—';
+    }
+
+    const xlab = text(W/2, H-8, "Weeks →"); xlab.setAttribute('text-anchor','middle'); xlab.setAttribute('fill','var(--muted)'); svg.appendChild(xlab);
+    const ylab = text(16, H/2, "Hours →"); ylab.setAttribute('transform', `rotate(-90 16 ${H/2})`); ylab.setAttribute('text-anchor','middle'); ylab.setAttribute('fill','var(--muted)'); svg.appendChild(ylab);
+
+    function grid(){
+      const gx = 8;
+      const gy = 6;
+      for (let i=0;i<=gx;i++){
+        const x = m.l + iw * i/gx;
+        const gl = line(x, m.t, x, m.t+ih);
+        gl.setAttribute('stroke','var(--grid)');
+        gl.setAttribute('stroke-width','1');
+        svg.appendChild(gl);
+        const wv = Math.round(weeks * i/gx);
+        const tx = text(x, H - 14, wv);
+        tx.setAttribute('text-anchor','middle');
+        tx.setAttribute('fill','var(--muted)');
+        svg.appendChild(tx);
+      }
+      for (let i=0;i<=gy;i++){
+        const y = m.t + ih * i/gy;
+        const gl = line(m.l, y, m.l+iw, y);
+        gl.setAttribute('stroke','var(--grid)');
+        gl.setAttribute('stroke-width','1');
+        svg.appendChild(gl);
+        const val = Math.round((yMax) * (1 - i/gy));
+        const ty = text(40, y+4, val);
+        ty.setAttribute('text-anchor','end');
+        ty.setAttribute('fill','var(--muted)');
+        svg.appendChild(ty);
+      }
+      const xaxis = line(m.l, m.t+ih, m.l+iw, m.t+ih); xaxis.setAttribute('stroke','#374151'); xaxis.setAttribute('stroke-width','1.5'); svg.appendChild(xaxis);
+      const yaxis = line(m.l, m.t, m.l, m.t+ih); yaxis.setAttribute('stroke','#374151'); yaxis.setAttribute('stroke-width','1.5'); svg.appendChild(yaxis);
+    }
+
+    function linePath(points){
+      const d = points.map((p,i)=> (i? 'L':'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d', d);
+      return path;
+    }
+    function line(x1,y1,x2,y2){
+      const l = document.createElementNS('http://www.w3.org/2000/svg','line');
+      l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+      return l;
+    }
+    function text(x,y,txt){
+      const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x); t.setAttribute('y',y);
+      t.textContent = txt;
+      return t;
+    }
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
