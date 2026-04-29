@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatGPT Task ROI Calculator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --card: #ffffff;
+      --text: #242424;
+      --muted: #666;
+      --border: #dddddd;
+      --accent: #2f6f73;
+      --accent-soft: #e4f0f0;
+      --warning: #9a5b00;
+      --danger: #9b2c2c;
+      --good: #247245;
+      --shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #edf6f6, var(--bg) 34rem);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    header {
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1.05;
+      margin: 0;
+      letter-spacing: -0.045em;
+    }
+
+    .lede {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin: 0;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .controls {
+      padding: 22px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .control {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .control:first-child { padding-top: 0; }
+    .control:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 750;
+      margin-bottom: 8px;
+    }
+
+    label span:last-child {
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .number-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .number-row input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font: inherit;
+    }
+
+    .chart-card {
+      padding: 18px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .metric {
+      background: var(--accent-soft);
+      border-radius: 16px;
+      padding: 12px;
+      min-height: 84px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.66rem;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-top: 5px;
+    }
+
+    .metric p {
+      margin: 5px 0 0;
+      font-size: 0.76rem;
+      line-height: 1.25;
+      color: var(--muted);
+    }
+
+    .chart-wrap {
+      height: 420px;
+      padding: 4px 2px 0;
+    }
+
+    .verdict {
+      margin-top: 18px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: #f5f1e8;
+      border: 1px solid #e6d8be;
+    }
+
+    .verdict strong { display: block; margin-bottom: 4px; }
+    .verdict p { margin: 0; color: var(--muted); }
+
+    .notes {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .credit {
+      margin-top: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .notes code {
+      background: #eee;
+      padding: 2px 5px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .controls { position: static; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      .metrics { grid-template-columns: 1fr; }
+      .chart-wrap { height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Is it worth figuring out how to use ChatGPT for this?</h1>
+    </header>
+
+    <section class="layout">
+      <aside class="card controls" aria-label="Calculator controls">
+        <div class="control">
+          <label for="setupTime">
+            <span>Time to figure it out</span>
+            <span id="setupTimeLabel">4 hours</span>
+          </label>
+          <p class="hint">Your best guess for how long you think it will take you to figure out how to get ChatGPT to do this task for you.</p>
+          <input id="setupTime" type="range" min="0.5" max="40" step="0.5" value="4" />
+        </div>
+
+        <div class="control">
+          <label for="weeklyTime">
+            <span>Current time spent each week</span>
+            <span id="weeklyTimeLabel">1 hour</span>
+          </label>
+          <p class="hint">How much time you estimate you spend doing this task yourself each week.</p>
+          <input id="weeklyTime" type="range" min="0.25" max="10" step="0.25" value="1" />
+        </div>
+
+        <div class="control">
+          <label for="successChance">
+            <span>Likelihood of success</span>
+            <span id="successChanceLabel">50%</span>
+          </label>
+          <p class="hint">Your best guess for how likely you think it is that you will figure out how to get ChatGPT to do this task for you.</p>
+          <input id="successChance" type="range" min="0" max="100" step="5" value="50" />
+        </div>
+      </aside>
+
+      <section class="card chart-card">
+        <div class="metrics">
+          <div class="metric">
+            <small>Expected weekly savings</small>
+            <strong id="expectedSavings">1.1h</strong>
+            <p>Weekly time × success chance</p>
+          </div>
+          <div class="metric">
+            <small>Breakeven point</small>
+            <strong id="breakeven">2.7 weeks</strong>
+            <p>When cumulative expected savings exceed setup time</p>
+          </div>
+          <div class="metric">
+            <small>52-week net gain</small>
+            <strong id="netGain">55.2h</strong>
+            <p>Expected time saved after subtracting setup time</p>
+          </div>
+          <div class="metric">
+            <small>52-week ROI</small>
+            <strong id="roi">1840%</strong>
+            <p>Net time gain ÷ setup time</p>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="roiChart" aria-label="Line chart showing cumulative time spent versus expected time saved over 52 weeks"></canvas>
+        </div>
+
+        <div class="verdict" id="verdictBox">
+          <strong id="verdictTitle">Probably worth trying.</strong>
+          <p id="verdictText">The expected savings pay back the setup time quickly and produce a strong 52-week return.</p>
+        </div>
+
+        <p class="notes">The chart treats the initial ChatGPT learning/setup time as a one-time cost. The savings line is probability-adjusted, so a 50% chance of success cuts the expected benefit in half. This assumes that if the workflow succeeds, it saves the full weekly time currently spent on the task. This is a decision aid, not a guarantee.</p>
+      </section>
+    </section>
+    <footer class="credit">Made by Chad Skelton with ChatGPT</footer>
+  </main>
+
+  <script>
+    const setupTime = document.getElementById('setupTime');
+    const weeklyTime = document.getElementById('weeklyTime');
+    const successChance = document.getElementById('successChance');
+
+    const setupTimeLabel = document.getElementById('setupTimeLabel');
+    const weeklyTimeLabel = document.getElementById('weeklyTimeLabel');
+    const successChanceLabel = document.getElementById('successChanceLabel');
+
+    const expectedSavingsEl = document.getElementById('expectedSavings');
+    const breakevenEl = document.getElementById('breakeven');
+    const netGainEl = document.getElementById('netGain');
+    const roiEl = document.getElementById('roi');
+    const verdictTitle = document.getElementById('verdictTitle');
+    const verdictText = document.getElementById('verdictText');
+    const verdictBox = document.getElementById('verdictBox');
+
+    function fmtHours(value) {
+      if (!isFinite(value)) return '—';
+      if (Math.abs(value) < 10) return `${value.toFixed(1)}h`;
+      return `${Math.round(value)}h`;
+    }
+
+    function fmtWeeks(value) {
+      if (!isFinite(value)) return 'Never';
+      if (value > 52) return `>${52} weeks`;
+      if (value < 1) return `${Math.round(value * 7)} days`;
+      return `${value.toFixed(1)} weeks`;
+    }
+
+    function fmtInputHours(value) {
+      const n = Number(value);
+      if (n === 1) return '1 hour';
+      if (n < 1) return `${Math.round(n * 60)} min`;
+      if (Number.isInteger(n)) return `${n} hours`;
+      return `${n.toFixed(2).replace(/\.00$/, '').replace(/0$/, '')} hours`;
+    }
+
+    const ctx = document.getElementById('roiChart');
+    const weeks = Array.from({ length: 53 }, (_, i) => i);
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: weeks,
+        datasets: [
+          {
+            label: 'Cumulative expected savings',
+            data: [],
+            borderWidth: 3,
+            tension: 0.18,
+            pointRadius: 0
+          },
+          {
+            label: 'Initial setup cost',
+            data: [],
+            borderWidth: 3,
+            borderDash: [7, 7],
+            pointRadius: 0
+          },
+          {
+            label: 'Breakeven',
+            data: [],
+            borderWidth: 0,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            showLine: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${fmtHours(context.parsed.y)}`;
+              }
+            }
+          },
+          legend: {
+            labels: {
+              usePointStyle: true,
+              boxWidth: 8,
+              padding: 18
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Weeks from now' },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: true, text: 'Cumulative hours' },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function update() {
+      const setup = Number(setupTime.value);
+      const weekly = Number(weeklyTime.value);
+      const chance = Number(successChance.value) / 100;
+      const expectedWeeklySavings = weekly * chance;
+      const breakeven = expectedWeeklySavings > 0 ? setup / expectedWeeklySavings : Infinity;
+      const gross52 = expectedWeeklySavings * 52;
+      const net52 = gross52 - setup;
+      const roi = setup > 0 ? (net52 / setup) * 100 : Infinity;
+
+      setupTimeLabel.textContent = fmtInputHours(setup);
+      weeklyTimeLabel.textContent = fmtInputHours(weekly);
+      successChanceLabel.textContent = `${Math.round(chance * 100)}%`;
+
+      expectedSavingsEl.textContent = fmtHours(expectedWeeklySavings);
+      breakevenEl.textContent = fmtWeeks(breakeven);
+      netGainEl.textContent = fmtHours(net52);
+      roiEl.textContent = isFinite(roi) ? `${Math.round(roi)}%` : '—';
+
+      const savingsData = weeks.map(w => expectedWeeklySavings * w);
+      const setupData = weeks.map(() => setup);
+      const breakevenData = weeks.map(w => {
+        if (!isFinite(breakeven)) return null;
+        return Math.round(w) === Math.round(breakeven) ? setup : null;
+      });
+
+      chart.data.datasets[0].data = savingsData;
+      chart.data.datasets[1].data = setupData;
+      chart.data.datasets[2].data = breakevenData;
+
+      const maxY = Math.max(setup, gross52, 1);
+      chart.options.scales.y.suggestedMax = maxY * 1.15;
+      chart.update();
+
+      verdictBox.style.background = '#f5f1e8';
+      verdictBox.style.borderColor = '#e6d8be';
+
+      if (net52 <= 0) {
+        verdictTitle.textContent = 'Probably not worth it yet.';
+        verdictText.textContent = 'The expected savings do not repay the setup time within 52 weeks. Try this only if there are other benefits, like quality, consistency, or reduced stress.';
+        verdictBox.style.background = '#fbefef';
+        verdictBox.style.borderColor = '#edc9c9';
+      } else if (breakeven > 12) {
+        verdictTitle.textContent = 'Maybe worth it, but not urgent.';
+        verdictText.textContent = 'It eventually pays off, but the breakeven point is fairly far away. This is better for recurring tasks you know you will keep doing.';
+      } else if (breakeven <= 4) {
+        verdictTitle.textContent = 'Very likely worth trying.';
+        verdictText.textContent = 'The expected savings repay the setup time quickly. This is exactly the kind of repeat task where learning a ChatGPT workflow can pay off.';
+        verdictBox.style.background = '#edf7f0';
+        verdictBox.style.borderColor = '#c6e6d0';
+      } else {
+        verdictTitle.textContent = 'Probably worth trying.';
+        verdictText.textContent = 'The expected savings pay back the setup time within a reasonable period and produce a positive 52-week return.';
+      }
+    }
+
+    [setupTime, weeklyTime, successChance].forEach(input => {
+      input.addEventListener('input', update);
+    });
+
+    update();
+  </script>
+</body>
+</html>
