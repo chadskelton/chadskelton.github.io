@@ -55,7 +55,7 @@ body {
 
 /* Header */
 .site-header {
-  padding: 26px 0 18px;
+  padding: 16px 0 12px;
   border-bottom: 1px solid var(--line);
   position: relative;
 }
@@ -66,13 +66,13 @@ body {
   letter-spacing: 0.12em;
   font-size: 12px;
   color: var(--sand);
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 
 .site-header h1 {
   font-family: var(--font-display);
-  font-size: clamp(28px, 8vw, 44px);
-  line-height: 0.9;
+  font-size: clamp(24px, 8.7vw, 42px);
+  line-height: 1.05;
   letter-spacing: 0.01em;
   margin: 0;
   color: var(--sand);
@@ -80,6 +80,7 @@ body {
 
 .title-skim { color: var(--amber); }
 .title-paddle { color: var(--seafoam); }
+.title-for { color: var(--sand); }
 
 .tagline {
   font-size: 15px;
@@ -97,7 +98,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
-  margin: 24px 0;
+  margin: 14px 0;
 }
 
 .status-item {
@@ -141,13 +142,13 @@ body {
 /* Section titles */
 .section-title {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 24px;
   letter-spacing: 0.02em;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   color: var(--sand);
 }
 
-.best-windows { margin: 36px 0; }
+.best-windows { margin: 20px 0; }
 
 /* Window cards */
 .window-cards {
