@@ -338,7 +338,7 @@ function fmtHourTick(date) {
 }
 
 function renderTideChart(hours) {
-  const w = 680, h = 240, padX = 10, padTop = 14, padBottom = 26;
+  const w = 680, h = 280, padX = 10, padTop = 30, padBottom = 50;
   const plotH = h - padTop - padBottom;
   const vals = hours.map(x => x.tideHeight);
   const min = Math.min(...vals), max = Math.max(...vals);
@@ -369,8 +369,11 @@ function renderTideChart(hours) {
     const dk = dayKey(hr.time);
     if (dk !== lastDay) {
       lastDay = dk;
-      dayTicks += `<line x1="${x(i)}" y1="${padTop}" x2="${x(i)}" y2="${h - padBottom}" stroke="var(--line)" stroke-dasharray="3,3" />`;
-      dayTicks += `<text x="${x(i) + 4}" y="12" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--sand-dim)">${fmtDayLabel(hr.time)}</text>`;
+      const tx = x(i);
+      const anchor = tx > w - 130 ? "end" : "start";
+      const lx = anchor === "end" ? tx - 6 : tx + 6;
+      dayTicks += `<line x1="${tx}" y1="${padTop}" x2="${tx}" y2="${h - padBottom}" stroke="var(--line)" stroke-dasharray="3,3" />`;
+      dayTicks += `<text x="${lx}" y="22" text-anchor="${anchor}" font-family="JetBrains Mono, monospace" font-size="20" fill="var(--sand-dim)">${fmtDayLabel(hr.time)}</text>`;
     }
   });
 
@@ -379,9 +382,9 @@ function renderTideChart(hours) {
   hours.forEach((hr, i) => {
     if (localHour(hr.time) % 6 !== 0) return;
     const tx = x(i);
-    const anchor = tx < 30 ? "start" : tx > w - 30 ? "end" : "middle";
-    hourTicks += `<line x1="${tx.toFixed(1)}" y1="${h - padBottom}" x2="${tx.toFixed(1)}" y2="${h - padBottom + 5}" stroke="var(--sand-faint)" stroke-width="1" />`;
-    hourTicks += `<text x="${tx.toFixed(1)}" y="${h - 8}" text-anchor="${anchor}" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--sand-faint)">${fmtHourTick(hr.time)}</text>`;
+    const anchor = tx < 40 ? "start" : tx > w - 40 ? "end" : "middle";
+    hourTicks += `<line x1="${tx.toFixed(1)}" y1="${h - padBottom}" x2="${tx.toFixed(1)}" y2="${h - padBottom + 6}" stroke="var(--sand-faint)" stroke-width="1" />`;
+    hourTicks += `<text x="${tx.toFixed(1)}" y="${h - 16}" text-anchor="${anchor}" font-family="JetBrains Mono, monospace" font-size="20" fill="var(--sand-faint)">${fmtHourTick(hr.time)}</text>`;
   });
 
   // "now" marker
