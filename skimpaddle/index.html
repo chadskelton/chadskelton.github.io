@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Skim &amp; Paddle — White Rock Conditions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">Semiahmoo Bay &middot; White Rock, BC</p>
+    <h1><span class="title-skim">Skim</span> &amp; <span class="title-paddle">Paddle</span> <span class="title-for">For Eric &amp; Toby</span></h1>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="status-bar" class="status-bar" aria-label="Current conditions">
+    <div class="status-item">
+      <span class="status-label">Updated</span>
+      <span class="status-value" id="status-updated">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Tide</span>
+      <span class="status-value" id="status-tide">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Wind</span>
+      <span class="status-value" id="status-wind">—</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Air Temp</span>
+      <span class="status-value" id="status-temp">—</span>
+    </div>
+  </section>
+
+  <section id="loading" class="loading-panel">
+    <p>Reading the tide charts and wind models&hellip;</p>
+  </section>
+
+  <section id="error-panel" class="error-panel hidden">
+    <p id="error-text">Something went wrong fetching live conditions.</p>
+  </section>
+
+  <div id="content" class="hidden">
+
+    <section class="best-windows" aria-label="Best windows in the next 48 hours">
+      <h2 class="section-title">Best windows, next 48h</h2>
+      <div class="window-cards" id="window-cards"></div>
+    </section>
+
+    <section class="tide-chart-section">
+      <h2 class="section-title">Tide curve</h2>
+      <div class="chart-legend">
+        <span class="legend-chip skim">Good skim band</span>
+        <span class="legend-chip paddle">Good paddle band</span>
+      </div>
+      <div id="tide-chart" class="tide-chart"></div>
+    </section>
+
+    <section class="outlook-section">
+      <h2 class="section-title">Hour by hour</h2>
+      <div class="outlook-toggle" role="tablist">
+        <button class="toggle-btn active" data-activity="skim" role="tab">
+          <span class="icon icon-skim" aria-hidden="true"></span>
+          Skimboard
+        </button>
+        <button class="toggle-btn" data-activity="paddle" role="tab">
+          <span class="icon icon-paddle" aria-hidden="true"></span>
+          Paddleboard
+        </button>
+      </div>
+      <div id="outlook-list" class="outlook-list"></div>
+    </section>
+
+    <section class="method-section">
+      <details>
+        <summary>How this is scored</summary>
+        <div id="method-body" class="method-body"></div>
+      </details>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>Tide predictions: Fisheries &amp; Oceans Canada (CHS) &middot; Wind &amp; temperature: Open-Meteo &middot; Built for the family, not the Coast Guard — always eyeball the beach before you go out.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
